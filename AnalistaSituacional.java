@@ -1,4 +1,7 @@
 
+import tabuleiro.Marca;
+import tabuleiro.Tabuleiro;
+
 public class AnalistaSituacional {
 
     private Tabuleiro tabDoJogo;
