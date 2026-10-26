@@ -1,3 +1,4 @@
+package tabuleiro;
 
 public class Marca {
 
@@ -6,7 +7,7 @@ public class Marca {
     public Marca(char smb) throws Exception {
         char lower = Character.toLowerCase(smb);
         if (lower != 'x' && lower != 'o') {
-            throw new Exception("Marca inválida!");
+            throw new Exception("tabuleiro.Marca inválida!");
         }
 
         this.simbolo = lower;
