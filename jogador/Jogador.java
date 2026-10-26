@@ -6,5 +6,5 @@ public interface Jogador {
 
     public Marca getMarca();
 
-    public void facaSuaJogada();
+    public void facaSuaJogada() throws Exception;
 }
