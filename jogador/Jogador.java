@@ -1,6 +1,10 @@
 package jogador;
 
-public interface Jogador
-{
-    // faça
+import tabuleiro.Marca;
+
+public interface Jogador {
+
+    public Marca getMarca();
+
+    public void facaSuaJogada();
 }
