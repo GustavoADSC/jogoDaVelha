@@ -1,11 +1,12 @@
 import jogador.*;
-import java.io.*;
+import tabuleiro.Marca;
+import tabuleiro.Tabuleiro;
 
 public class Velha
 {
     public static void main (String args [])
     {
-        Tabuleiro           tabDoJogo;
+        Tabuleiro tabDoJogo;
 
         Jogador             jogador  = null;
         JogadorHumano       jogadorH = null;
