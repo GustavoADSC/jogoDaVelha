@@ -1,8 +1,11 @@
 package jogador;
 
+import tabuleiro.Marca;
+import tabuleiro.Tabuleiro;
+
 public class JogadorAutomatico implements Jogador
 {
-    private Marca     marca     = null;
+    private Marca marca     = null;
     private Tabuleiro tabDoJogo = null;
 
     public JogadorAutomatico (Tabuleiro tab) throws Exception

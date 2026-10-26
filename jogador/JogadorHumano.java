@@ -1,6 +1,9 @@
 ﻿package jogador;
 
+import tabuleiro.*;
+
 import java.io.*;
+import java.util.Scanner;
 
 public class JogadorHumano implements Jogador
 {
@@ -22,11 +25,15 @@ public class JogadorHumano implements Jogador
     {
         // atribuir tab para tabDoJogo
         // e mrc para marca
+        if (tab == null || mrc == null) throw new Exception("Tabuleiro e Marca devem conter valores diferentes de null");
+
+        this.tabDoJogo = tab;
+        this.marca = mrc;
     }
 
     public Marca getMarca ()
     {
-        // retorna a marca do jogador
+        return this.marca;
     }
 
     public void facaSuaJogada ()
@@ -38,23 +45,35 @@ public class JogadorHumano implements Jogador
 
     public void vcGanhou ()
     {
-        // mostra mensagem indicando vitoria
+        System.out.println("Parabéns, vocẽ ganhou.");
     }
 
     public void vcPerdeu ()
     {
-        // mostra mensagem indicando derrota
+
+        System.err.println("Parabéns, vocẽ perdeu.");
     }
 
     public void deuVelha ()
     {
-        // mostra mensagem indicando empate
+
+        System.out.println("Parabéns, vocẽ empatou.");
     }
 
-    public boolean querMaisUmaPartida ()
-    {
-        // perguntar se deseja jogar de novo
+    public static boolean querMaisUmaPartida () {
+
+        Scanner sc = new Scanner(System.in);
+        char res;
+        do{
+            // perguntar se deseja jogar de novo
+            System.out.printf("Quer jogar de novo? [S/N]: ");
+            res = Character.toLowerCase(sc.nextLine().charAt(0));
+
+        } while (res != 's' && res != 'n');
+
         // permitindo digitacao e retornando
+
+        return res == 's';
         // true ou false, conforme a resposta
     }
 }
