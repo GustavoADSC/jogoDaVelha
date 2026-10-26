@@ -5,24 +5,21 @@ public class Tabuleiro implements Cloneable
 
     public boolean haMarcaNaPosicao (int lin, int col) throws Exception
     {
-        // verifico se em matriz[lin][col]
-        // tem null, retornando false em caso
-        // afirmativo, ou true em caso negativo
-        // dar excecao caso lin ou col invalido
+        if(lin < 0 || col < 0 || lin > 3 || col > 3) throw new Exception("Linhas e colunas precisam ser numeros inteiros positivos e menor ou igual a 3.");
+        return matriz[lin][col] == null;
     }
 
     public Marca getMarcaNaPosicao (int lin, int col) throws Exception
     {
-        // retornar a marca que tem em
-        // matriz[lin][col]
-        // dar excecao caso lin ou col invalido
+        if(lin < 0 || col < 0 || lin > 3 || col > 3) throw new Exception("Linhas e colunas precisam ser numeros inteiros positivos e menor ou igual a 3.");
+        return matriz[lin][col];
     }
 
     public void setMarcaNaPosicao (Marca mrc, int lin, int col) throws Exception
     {
-        // colocar mrc em matriz[lin][col],
-        // dar excecao caso lin ou col invalido
-        // dar excecao caso mrc seja null
+        if(lin < 0 || col < 0 || lin > 3 || col > 3) throw new Exception("Linhas e colunas precisam ser numeros inteiros positivos e menor ou igual a 3.");
+        if(mrc == null) throw new Exception("A marca não pode ser nulo.");
+        matriz[lin][col] = mrc;
     }
 
     @Override
