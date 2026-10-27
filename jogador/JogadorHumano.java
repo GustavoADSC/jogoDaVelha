@@ -8,13 +8,15 @@ import java.util.Scanner;
 public class JogadorHumano implements Jogador
 {
 
-    private Scanner sc = new Scanner(System.in);
+    // static: um Scanner so para todas as partidas; varios Scanners no System.in perdem entrada
+    private static Scanner sc = new Scanner(System.in);
     private Marca          marca     = null;
     private Tabuleiro      tabDoJogo = null;
 //    private BufferedReader teclado   = new BufferedReader
 //                                        (new InputStreamReader
 //                                        (System.in));
 
+    // Construtor que pergunta ao usuário qual marca o JogadorHumano quer ter.
     public JogadorHumano (Tabuleiro tab) throws Exception
     {
         if (tab == null) throw new Exception("Tabuleiro não deve ser nulo");
@@ -24,7 +26,7 @@ public class JogadorHumano implements Jogador
         while (mrc == null)
         {
             System.out.println("Qual a marca deseja [x][o]?");
-            String resposta = sc.nextLine().strip();
+            String resposta = this.sc.nextLine().strip();
 
             try {
                 mrc = new Marca(resposta.charAt(0));
@@ -37,6 +39,7 @@ public class JogadorHumano implements Jogador
         this.marca = mrc;
     }
 
+    // Construtor que recebe a marca que sobrou, quando o JogadorAutomatico começa e sorteia primeiro.
     public JogadorHumano (Tabuleiro tab, Marca mrc) throws Exception
     {
         // atribuir tab para tabDoJogo
@@ -102,12 +105,12 @@ public class JogadorHumano implements Jogador
 
     public void vcPerdeu ()
     {
-        System.out.println("Parabéns, voce perdeu.");
+        System.out.println("Que pena, voce perdeu. Tente de novo!");
     }
 
     public void deuVelha ()
     {
-        System.out.println("Parabéns, voce empatou.");
+        System.out.println("Deu velha! Ninguem ganhou.");
     }
 
     public boolean querMaisUmaPartida () {
@@ -126,9 +129,7 @@ public class JogadorHumano implements Jogador
 
         } while (res != 's' && res != 'n');
 
-        // permitindo digitacao e retornando
-
         return res == 's';
-        // true ou false, conforme a resposta
     }
+
 }

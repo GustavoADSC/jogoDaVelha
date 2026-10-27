@@ -5,110 +5,146 @@ import tabuleiro.Tabuleiro;
 
 public class JogadorAutomatico implements Jogador
 {
-    private Marca marca     = null;
+    private Marca marca = null;
     private Tabuleiro tabDoJogo = null;
+    private static final int[][] LINHAS_VENCEDORAS = {
+            {0, 0, 0, 1, 0, 2}, // linha 0
+            {1, 0, 1, 1, 1, 2}, // linha 1
+            {2, 0, 2, 1, 2, 2}, // linha 2
+            {0, 0, 1, 0, 2, 0}, // coluna 0
+            {0, 1, 1, 1, 2, 1}, // coluna 1
+            {0, 2, 1, 2, 2, 2}, // coluna 2
+            {0, 0, 1, 1, 2, 2}, // diagonal principal
+            {0, 2, 1, 1, 2, 0} // diagonal secundaria
+        };
 
+    // Construtor que decide a marca do JogadorAutomatico aleatoriamente.
     public JogadorAutomatico (Tabuleiro tab) throws Exception
-    {   tabDoJogo = tab;
-        // atribuir tab para tabDoJogo
-        // fazer o jogador escolher sua marca
-        // via sorteio de numeros aleatorio
-        if ((int)(Math.random()*2) == 0)
-            marca=new marca('X');
-        else
-            marca=new marca('O');
+    {   
+        if (tab == null) throw new Exception("Tabuleiro inexistente.");
+
+        this.tabDoJogo = tab;
+
+        if ((int)(Math.random() * 2) == 0){
+            this.marca = new Marca('x');
+        }        
+        else {
+            this.marca = new Marca('o');
+        }    
     }
 
+    // Construtor que recebe a marca que sobrou, quando o JogadorHumano começa e escolhe primeiro.
     public JogadorAutomatico (Tabuleiro tab, Marca mrc) throws Exception
     {
-        // atribuir tab para tabDoJogo
-        // e mrc para marca
+        if (tab == null || mrc == null) throw new Exception("Tabuleiro e/ou marca faltantes.");
+        
+        this.tabDoJogo = tab;
+        this.marca = mrc;
     }
 
     public Marca getMarca ()
     {
-        // retorna a marca do jogador
+        return this.marca;
     }
 
     public void facaSuaJogada ()
     {
         try
         {
-            // tentando ganhar na linha 0
-            if ... else if ... else if ...
-            else
-            // tentando ganhar na linha 1
-            if ... else if ... else if ...
-            else
-            // tentando ganhar na linha 2
-            if ... else if ... else if ...
-            else
-            // tentando ganhar na coluna 0
-            if ... else if ... else if ...
-            else
-            // tentando ganhar na coluna 1
-            if ... else if ... else if ...
-            else
-            // tentando ganhar na coluna 2
-            if ... else if ... else if ...
-            else
-            // tentando ganhar na diagonal principal
-            if ... else if ... else if ...
-            else
-            // tentando ganhar na diagonal secundaria
-            if ... else if ... else if ...
-            else
-            // tentando atrapalhar vitoria na linha 0
-            if ... else if ... else if ...
-            else
-            // tentando atrapalhar vitoria na linha 1
-            if ... else if ... else if ...
-            else
-            // tentando atrapalhar vitoria na linha 2
-            if ... else if ... else if ...
-            else
-            // tentando atrapalhar vitoria na coluna 0
-            if ... else if ... else if ...
-            else
-            // tentando atrapalhar vitoria na coluna 1
-            if ... else if ... else if ...
-            else
-            // tentando atrapalhar vitoria na coluna 2
-            if ... else if ... else if ...
-            else
-            // tentando atrapalhar vitoria na diagonal principal
-            if ... else if ... else if ...
-            else
-            // tentando atrapalhar vitoria na diagonal secundaria
-            if ... else if ... else if ...
-            else
-            // tentando jogada de futuro (há 1 marca do jogador e mais nada; vamos lá e plantamos outra marca) na linha 0
-            if ... else if ... else if ...
-            else
-            // tentando jogada de futuro (há 1 marca do jogador e mais nada; vamos lá e plantamos outra marca) na linha 1
-            if ... else if ... else if ...
-            else
-            // tentando jogada de futuro (há 1 marca do jogador e mais nada; vamos lá e plantamos outra marca) na linha 2
-            if ... else if ... else if ...
-            else
-            // tentando jogada de futuro (há 1 marca do jogador e mais nada; vamos lá e plantamos outra marca) na coluna 0
-            if ... else if ... else if ...
-            else
-            // tentando jogada de futuro (há 1 marca do jogador e mais nada; vamos lá e plantamos outra marca) na coluna 1
-            if ... else if ... else if ...
-            else
-            // tentando jogada de futuro (há 1 marca do jogador e mais nada; vamos lá e plantamos outra marca) na coluna 2
-            if ... else if ... else if ...
-            else
-            // tentando jogada de futuro (há 1 marca do jogador e mais nada; vamos lá e plantamos outra marca) na diagonal principal
-            if ... else if ... else if ...
-            else
-            // tentando jogada de futuro (há 1 marca do jogador e mais nada; vamos lá e plantamos outra marca) na diagonal secundaria
-            if ... else if ... else if ...
-            else
-            // termine jogando num lugar qualquer que esteja livre
+            // 1) tentando ganhar (2 marcas minhas e 1 casa vazia)
+            for (int[] l : LINHAS_VENCEDORAS)
+            {
+                // as 3 casas dessa linha/coluna/diagonal
+                Marca a = this.tabDoJogo.getMarcaNaPosicao(l[0], l[1]);
+                Marca b = this.tabDoJogo.getMarcaNaPosicao(l[2], l[3]);
+                Marca c = this.tabDoJogo.getMarcaNaPosicao(l[4], l[5]);
+
+                if (this.marca.equals(a) && this.marca.equals(b) && c == null)
+                {
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[4], l[5]); // falta a casa c
+                    return;
+                }
+                else if (this.marca.equals(a) && this.marca.equals(c) && b == null)
+                {
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[2], l[3]); // falta a casa b
+                    return;
+                }
+                else if (this.marca.equals(b) && this.marca.equals(c) && a == null)
+                {
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[0], l[1]); // falta a casa a
+                    return;
+                }
+            }
+
+            // 2) tentando atrapalhar vitoria (2 marcas do adversario e 1 casa vazia)
+            Marca mrcAdv = new Marca(this.marca.getSimbolo() == 'x' ? 'o' : 'x');
+
+            for (int[] l : LINHAS_VENCEDORAS)
+            {
+                Marca a = this.tabDoJogo.getMarcaNaPosicao(l[0], l[1]);
+                Marca b = this.tabDoJogo.getMarcaNaPosicao(l[2], l[3]);
+                Marca c = this.tabDoJogo.getMarcaNaPosicao(l[4], l[5]);
+
+                if (mrcAdv.equals(a) && mrcAdv.equals(b) && c == null)
+                {
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[4], l[5]); // atrapalha na casa c
+                    return;
+                }
+                else if (mrcAdv.equals(a) && mrcAdv.equals(c) && b == null)
+                {
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[2], l[3]); // atrapalha na casa b
+                    return;
+                }
+                else if (mrcAdv.equals(b) && mrcAdv.equals(c) && a == null)
+                {
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[0], l[1]); // atrapalha na casa a
+                    return;
+                }
+            }
+
+            // 3) tentando jogada de futuro (1 marca minha e as outras 2 casas vazias)
+            for (int[] l : LINHAS_VENCEDORAS)
+            {
+                Marca a = this.tabDoJogo.getMarcaNaPosicao(l[0], l[1]);
+                Marca b = this.tabDoJogo.getMarcaNaPosicao(l[2], l[3]);
+                Marca c = this.tabDoJogo.getMarcaNaPosicao(l[4], l[5]);
+
+                if (this.marca.equals(a) && b == null && c == null)
+                {
+                    int i = Math.random() < 0.5 ? 2 : 4;   // sorteia b ou c
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[i], l[i+1]);
+                    return;
+                }
+                else if (this.marca.equals(b) && a == null && c == null)
+                {
+                    int i = Math.random() < 0.5 ? 0 : 4;   // sorteia a ou c
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[i], l[i+1]);
+                    return;
+                }
+                else if (this.marca.equals(c) && a == null && b == null)
+                {
+                    int i = Math.random() < 0.5 ? 0 : 2;   // sorteia a ou b
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, l[i], l[i+1]);
+                    return;
+                }
+            }
+
+            // 4) termine jogando num lugar qualquer que esteja livre (sorteado)
+            //    so chega aqui com o jogo em andamento, entao sempre existe casa livre
+            for (;;)
+            {
+                int lin = (int)(Math.random() * 3);   // 0, 1 ou 2
+                int col = (int)(Math.random() * 3);
+
+                if (!this.tabDoJogo.haMarcaNaPosicao(lin, col))
+                {
+                    this.tabDoJogo.setMarcaNaPosicao(this.marca, lin, col);
+                    return;
+                }
+            }
+            
         }
         catch (Exception erro)
-        {} // ignorando pois sei que n o estou usando posicao invalida nem comparando com equals um null
+        {} // ignorando pois sei que n estou usando posicao invalida nem comparando com equals um null
     }
 }
