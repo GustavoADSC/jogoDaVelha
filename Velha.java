@@ -23,11 +23,11 @@ public class Velha {
                 if (jogadorHumanoComeca) {
                     jogadorH = new JogadorHumano(tabDoJogo);
                     jogadorA = new JogadorAutomatico(tabDoJogo,
-                            new Marca(jogadorH.getMarca().getSimbolo() == 'X' ? 'O' : 'X'));
+                            new Marca(jogadorH.getMarca().getSimbolo() == 'x' ? 'o' : 'x'));
                 } else {
                     jogadorA = new JogadorAutomatico(tabDoJogo);
                     jogadorH = new JogadorHumano(tabDoJogo,
-                            new Marca(jogadorA.getMarca().getSimbolo() == 'X' ? 'O' : 'X'));
+                            new Marca(jogadorA.getMarca().getSimbolo() == 'x' ? 'o' : 'x'));
                 }
 
                 analista = new AnalistaSituacional(tabDoJogo);
@@ -39,6 +39,10 @@ public class Velha {
                 }
 
                 do {
+                    if (jogador == jogadorH) {
+                        System.out.println(tabDoJogo);
+                    }
+
                     jogador.facaSuaJogada();
 
                     if (jogador == jogadorH) {
@@ -48,16 +52,20 @@ public class Velha {
                     }
                 } while (!analista.fimDeJogo());
 
-                if (analista.getMarcaDoVencedor().equals(jogadorH.getMarca())) {
-                    jogadorH.vcGanhou(); 
-                }else if (analista.getMarcaDoVencedor().equals(jogadorA.getMarca())) {
-                    jogadorH.vcPerdeu(); 
-                }else {
+                System.out.println(tabDoJogo);
+
+                Marca vencedor = analista.getMarcaDoVencedor();
+                if (vencedor == null) {
                     jogadorH.deuVelha();
+                }else if (vencedor.equals(jogadorH.getMarca())) {
+                    jogadorH.vcGanhou();
+                }else {
+                    jogadorH.vcPerdeu();
                 }
 
                 jogadorHumanoComeca = !jogadorHumanoComeca;
             } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
             }
         } while (jogadorH.querMaisUmaPartida());
     }

@@ -46,8 +46,8 @@ public class AnalistaSituacional {
 
     private boolean tabuleiroCheio() {
         try {
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < 2; j++) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
                     if (!tabDoJogo.haMarcaNaPosicao(i, j)) {
                         return false;
                     }
@@ -62,7 +62,7 @@ public class AnalistaSituacional {
     }
 
     public boolean fimDeJogo() {
-        return this.getMarcaDoVencedor() == null || this.tabuleiroCheio();
+        return this.getMarcaDoVencedor() != null || this.tabuleiroCheio();
     }
 
     @Override

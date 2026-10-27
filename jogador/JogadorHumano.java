@@ -1,4 +1,4 @@
-﻿package jogador;
+package jogador;
 
 import tabuleiro.*;
 
@@ -18,8 +18,23 @@ public class JogadorHumano implements Jogador
     public JogadorHumano (Tabuleiro tab) throws Exception
     {
         if (tab == null) throw new Exception("Tabuleiro não deve ser nulo");
+        
+        // Pergunta a marca que o usuário quer ter.
+        Marca mrc = null;
+        while (mrc == null)
+        {
+            System.out.println("Qual a marca deseja [x][o]?");
+            String resposta = sc.nextLine().strip();
+
+            try {
+                mrc = new Marca(resposta.charAt(0));
+            } catch (Exception e) {
+                System.out.println("Marca inválida, digite x ou o.");
+            }
+        }
 
         this.tabDoJogo = tab;
+        this.marca = mrc;
     }
 
     public JogadorHumano (Tabuleiro tab, Marca mrc) throws Exception
@@ -42,58 +57,57 @@ public class JogadorHumano implements Jogador
         // jogar, permitindo digitacao e chamando
         // os métodos apropriados de tabDoJogo
 
-        System.out.println("Onde você quer jogar? digite no formato 'linha-coluna', separado por traço");
-        String onde = sc.nextLine().strip().replace("-", "");
-        int linha = Integer.valueOf(onde.charAt(0));
-        int coluna = Integer.valueOf(onde.charAt(0));
+        // repete ate o jogador digitar uma jogada valida
+        for (;;) {
+            System.out.println("Onde você quer jogar? digite no formato 'linha-coluna', separado por traço(-)");
+            String onde = sc.nextLine().strip().replace("-", "");
 
-        boolean temErro = false;
-        if (linha < 1 || linha > 3) {
-            System.out.println("A linha deve estar entre 1 e 3");
-            temErro = true;
-        }
+            if (onde.length() != 2 || !Character.isDigit(onde.charAt(0)) || !Character.isDigit(onde.charAt(1))) {
+                System.out.println("Formato inválido, digite por exemplo 1-3");
+                continue;
+            }
 
-        if (coluna < 1 || coluna > 3){
-            System.out.println("A coluna deve estar entre 1 e 3");
-            temErro = true;
-        }
+            // '1' - '0' == 1, '2' - '0' == 2, ...
+            int linha = onde.charAt(0) - '0';
+            int coluna = onde.charAt(1) - '0';
 
-        if (temErro) return;
+            boolean temErro = false;
+            if (linha < 1 || linha > 3) {
+                System.out.println("A linha deve estar entre 1 e 3");
+                temErro = true;
+            }
 
-        if (tabDoJogo.haMarcaNaPosicao(linha, coluna)) {
-            System.out.println("Posição já ocupada");
+            if (coluna < 1 || coluna > 3){
+                System.out.println("A coluna deve estar entre 1 e 3");
+                temErro = true;
+            }
+
+            if (temErro) continue;
+
+            // o usuario digita de 1 a 3, mas o tabuleiro usa de 0 a 2
+            if (tabDoJogo.haMarcaNaPosicao(linha - 1, coluna - 1)) {
+                System.out.println("Posição já ocupada");
+                continue;
+            }
+
+            tabDoJogo.setMarcaNaPosicao(this.marca, linha - 1, coluna - 1);
             return;
         }
-
-        char marcaInput = sc.nextLine().strip().charAt(0);
-        try {
-            Marca marca = new Marca(marcaInput);
-            tabDoJogo.setMarcaNaPosicao(marca, linha - 1, coluna - 1);
-
-
-        } catch (Exception e){
-            System.out.println("Marca inválida");
-            return;
-        }
-
-
     }
 
     public void vcGanhou ()
     {
-        System.out.println("Parabéns, vocẽ ganhou.");
+        System.out.println("Parabéns, voce ganhou.");
     }
 
     public void vcPerdeu ()
     {
-
-        System.err.println("Parabéns, vocẽ perdeu.");
+        System.out.println("Parabéns, voce perdeu.");
     }
 
     public void deuVelha ()
     {
-
-        System.out.println("Parabéns, vocẽ empatou.");
+        System.out.println("Parabéns, voce empatou.");
     }
 
     public boolean querMaisUmaPartida () {
@@ -102,7 +116,13 @@ public class JogadorHumano implements Jogador
         do{
             // perguntar se deseja jogar de novo
             System.out.printf("Quer jogar de novo? [S/N]: ");
-            res = Character.toLowerCase(this.sc.nextLine().charAt(0));
+            String resposta = this.sc.nextLine().strip();
+
+            // se so apertou Enter, nao tem charAt(0); usa ' ' para o laco perguntar de novo
+            if (resposta.isEmpty())
+                res = ' ';
+            else
+                res = Character.toLowerCase(resposta.charAt(0));
 
         } while (res != 's' && res != 'n');
 
