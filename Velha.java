@@ -67,6 +67,9 @@ public class Velha {
             } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
             }
-        } while (jogadorH.querMaisUmaPartida());
+
+            // jogadorH so e null se deu erro antes de cria-lo (na primeira partida);
+            // ai nao tem a quem perguntar, entao encerra
+        } while (jogadorH != null && jogadorH.querMaisUmaPartida());
     }
 }

@@ -1,32 +1,39 @@
 package jogador;
 
+import java.util.Scanner;
 import tabuleiro.*;
 
-import java.io.*;
-import java.util.Scanner;
-
-public class JogadorHumano implements Jogador
-{
+public class JogadorHumano implements Jogador {
 
     // static: um Scanner so para todas as partidas; varios Scanners no System.in perdem entrada
     private static Scanner sc = new Scanner(System.in);
-    private Marca          marca     = null;
-    private Tabuleiro      tabDoJogo = null;
+    private Marca marca = null;
+    private Tabuleiro tabDoJogo = null;
 //    private BufferedReader teclado   = new BufferedReader
 //                                        (new InputStreamReader
 //                                        (System.in));
 
+    // le uma linha do teclado; se a entrada acabou (Ctrl+D), lanca uma Exception
+    // em vez da NoSuchElementException do Scanner
+    private static String lerLinha() throws Exception {
+        if (!sc.hasNextLine()) {
+            throw new Exception("Entrada encerrada.");
+        }
+
+        return sc.nextLine().strip();
+    }
+
     // Construtor que pergunta ao usuário qual marca o JogadorHumano quer ter.
-    public JogadorHumano (Tabuleiro tab) throws Exception
-    {
-        if (tab == null) throw new Exception("Tabuleiro não deve ser nulo");
-        
+    public JogadorHumano(Tabuleiro tab) throws Exception {
+        if (tab == null) {
+            throw new Exception("Tabuleiro não deve ser nulo");
+        }
+
         // Pergunta a marca que o usuário quer ter.
         Marca mrc = null;
-        while (mrc == null)
-        {
+        while (mrc == null) {
             System.out.println("Qual a marca deseja [x][o]?");
-            String resposta = this.sc.nextLine().strip();
+            String resposta = lerLinha();
 
             try {
                 mrc = new Marca(resposta.charAt(0));
@@ -40,22 +47,24 @@ public class JogadorHumano implements Jogador
     }
 
     // Construtor que recebe a marca que sobrou, quando o JogadorAutomatico começa e sorteia primeiro.
-    public JogadorHumano (Tabuleiro tab, Marca mrc) throws Exception
-    {
+    public JogadorHumano(Tabuleiro tab, Marca mrc) throws Exception {
         // atribuir tab para tabDoJogo
         // e mrc para marca
-        if (tab == null || mrc == null) throw new Exception("Tabuleiro e Marca devem conter valores diferentes de null");
+        if (tab == null || mrc == null) {
+            throw new Exception("Tabuleiro e Marca devem conter valores diferentes de null");
+        }
 
         this.tabDoJogo = tab;
         this.marca = mrc;
     }
 
-    public Marca getMarca ()
-    {
+    @Override
+    public Marca getMarca() {
         return this.marca;
     }
 
-    public void facaSuaJogada () throws Exception {
+    @Override
+    public void facaSuaJogada() throws Exception {
         // pergunta para o jogador onde ele quer
         // jogar, permitindo digitacao e chamando
         // os métodos apropriados de tabDoJogo
@@ -63,7 +72,7 @@ public class JogadorHumano implements Jogador
         // repete ate o jogador digitar uma jogada valida
         for (;;) {
             System.out.println("Onde você quer jogar? digite no formato 'linha-coluna', separado por traço(-)");
-            String onde = sc.nextLine().strip().replace("-", "");
+            String onde = lerLinha().replace("-", "");
 
             if (onde.length() != 2 || !Character.isDigit(onde.charAt(0)) || !Character.isDigit(onde.charAt(1))) {
                 System.out.println("Formato inválido, digite por exemplo 1-3");
@@ -80,12 +89,14 @@ public class JogadorHumano implements Jogador
                 temErro = true;
             }
 
-            if (coluna < 1 || coluna > 3){
+            if (coluna < 1 || coluna > 3) {
                 System.out.println("A coluna deve estar entre 1 e 3");
                 temErro = true;
             }
 
-            if (temErro) continue;
+            if (temErro) {
+                continue;
+            }
 
             // o usuario digita de 1 a 3, mas o tabuleiro usa de 0 a 2
             if (tabDoJogo.haMarcaNaPosicao(linha - 1, coluna - 1)) {
@@ -98,34 +109,38 @@ public class JogadorHumano implements Jogador
         }
     }
 
-    public void vcGanhou ()
-    {
+    public void vcGanhou() {
         System.out.println("Parabéns, voce ganhou.");
     }
 
-    public void vcPerdeu ()
-    {
+    public void vcPerdeu() {
         System.out.println("Que pena, voce perdeu. Tente de novo!");
     }
 
-    public void deuVelha ()
-    {
+    public void deuVelha() {
         System.out.println("Deu velha! Ninguem ganhou.");
     }
 
-    public boolean querMaisUmaPartida () {
+    public boolean querMaisUmaPartida() {
 
         char res;
-        do{
+        do {
             // perguntar se deseja jogar de novo
             System.out.printf("Quer jogar de novo? [S/N]: ");
-            String resposta = this.sc.nextLine().strip();
+
+            // se a entrada acabou, nao tem como perguntar; entende como nao
+            if (!sc.hasNextLine()) {
+                System.out.println();
+                return false;
+            }
+            String resposta = sc.nextLine().strip();
 
             // se so apertou Enter, nao tem charAt(0); usa ' ' para o laco perguntar de novo
-            if (resposta.isEmpty())
-                res = ' ';
-            else
+            if (resposta.isEmpty()) {
+                res = ' '; 
+            }else {
                 res = Character.toLowerCase(resposta.charAt(0));
+            }
 
         } while (res != 's' && res != 'n');
 

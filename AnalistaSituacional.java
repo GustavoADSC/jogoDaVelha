@@ -15,20 +15,8 @@ public class AnalistaSituacional {
     }
 
     public Marca getMarcaDoVencedor() {
-
-        int[][] linhasVencedoras = {
-            {0, 0, 0, 1, 0, 2}, // linha 0
-            {1, 0, 1, 1, 1, 2}, // linha 1
-            {2, 0, 2, 1, 2, 2}, // linha 2
-            {0, 0, 1, 0, 2, 0}, // coluna 0
-            {0, 1, 1, 1, 2, 1}, // coluna 1
-            {0, 2, 1, 2, 2, 2}, // coluna 2
-            {0, 0, 1, 1, 2, 2}, // diagonal principal
-            {0, 2, 1, 1, 2, 0} // diagonal secundaria
-        };
-
         try {
-            for (int[] l : linhasVencedoras) {
+            for (int[] l : Tabuleiro.LINHAS_VENCEDORAS) {
                 Marca a = tabDoJogo.getMarcaNaPosicao(l[0], l[1]);
                 Marca b = tabDoJogo.getMarcaNaPosicao(l[2], l[3]);
                 Marca c = tabDoJogo.getMarcaNaPosicao(l[4], l[5]);
@@ -88,11 +76,12 @@ public class AnalistaSituacional {
             return true;
         }
 
-        if (obj instanceof AnalistaSituacional other) {
-            return this.tabDoJogo.equals(other.tabDoJogo);
+        if (this.getClass() != obj.getClass()) {
+            return false;
         }
 
-        return false;
+        AnalistaSituacional outro = (AnalistaSituacional) obj;
+        return this.tabDoJogo.equals(outro.tabDoJogo);
     }
 
     @Override

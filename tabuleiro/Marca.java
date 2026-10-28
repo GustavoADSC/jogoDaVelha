@@ -7,7 +7,7 @@ public class Marca {
     public Marca(char smb) throws Exception {
         char lower = Character.toLowerCase(smb);
         if (lower != 'x' && lower != 'o') {
-            throw new Exception("tabuleiro.Marca inválida!");
+            throw new Exception("Marca inválida!");
         }
 
         this.simbolo = lower;
@@ -31,11 +31,12 @@ public class Marca {
             return true;
         }
 
-        if (obj instanceof Marca other) {
-            return this.simbolo == other.simbolo;
+        if (this.getClass() != obj.getClass()) {
+            return false;
         }
 
-        return false;
+        Marca outra = (Marca) obj;
+        return this.simbolo == outra.simbolo;
     }
 
     @Override

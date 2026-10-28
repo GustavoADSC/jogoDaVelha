@@ -2,6 +2,18 @@ package tabuleiro;
 
 public class Tabuleiro implements Cloneable
 {
+    // as 8 trincas que dao vitoria, cada uma como {lin, col, lin, col, lin, col}
+    public static final int[][] LINHAS_VENCEDORAS = {
+            {0, 0, 0, 1, 0, 2}, // linha 0
+            {1, 0, 1, 1, 1, 2}, // linha 1
+            {2, 0, 2, 1, 2, 2}, // linha 2
+            {0, 0, 1, 0, 2, 0}, // coluna 0
+            {0, 1, 1, 1, 2, 1}, // coluna 1
+            {0, 2, 1, 2, 2, 2}, // coluna 2
+            {0, 0, 1, 1, 2, 2}, // diagonal principal
+            {0, 2, 1, 1, 2, 0} // diagonal secundaria
+        };
+
     // a principio, toda igual a null
     private Marca matriz [][] = new Marca [3][3];
     
@@ -106,12 +118,15 @@ public class Tabuleiro implements Cloneable
     @Override
     public Object clone ()
     {
-        Tabuleiro ret = null;
-        try {
-            ret = new Tabuleiro(this);
-        } catch (Exception e) {
-            // NÃO VAI DAR ERRO FÉ.
+        // copia direto, sem passar pelo construtor de copia, que lanca Exception
+        Tabuleiro ret = new Tabuleiro();
+
+        for (int lin = 0; lin < 3; lin++) {
+            for (int col = 0; col < 3; col++) {
+                ret.matriz[lin][col] = this.matriz[lin][col];
+            }
         }
+
         return ret;
     }
 }
